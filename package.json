@@ -1,28 +1,26 @@
 {
-    "name": "hardhat_local_net",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "main": "node main.js",
-        "nodeLocal": "npx hardhat node --network local",
-        "nodeMainLocal": "npx hardhat node --network mainLocal",
-        "deployCy": "npx hardhat run scripts/deploy.js --network klaytn",
-        "deployBao": "npx hardhat run scripts/deploy.js --network baobab",
-        "compile": "npx hardhat compile",
-        "test": "npx hardhat test"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "@nomicfoundation/hardhat-chai-matchers": "^1.0.3",
-        "@nomicfoundation/hardhat-network-helpers": "^1.0.6",
-        "@nomicfoundation/hardhat-toolbox": "^2.0.1",
-        "@openzeppelin/contracts": "^4.8.1",
-        "chai": "^4.3.6",
-        "dotenv": "^16.0.3",
-        "ethers": "^5.7.1",
-        "hardhat": "^2.11.2",
-        "web3": "^1.8.1"
-    }
+  "name": "hardhat_local_net",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "main": "node main.js",
+    "nodeLocal": "npx hardhat node --network local",
+    "nodeMainLocal": "npx hardhat node --network mainLocal",
+    "deployCy": "npx hardhat run scripts/deploy.js --network klaytn",
+    "deployBao": "npx hardhat run scripts/deploy.js --network baobab",
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.10",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@openzeppelin/contracts": "^4.9.6",
+    "chai": "^4.3.6",
+    "dotenv": "^16.0.3",
+    "ethers": "^6.11.1",
+    "hardhat": "^2.22.2"
+  }
 }

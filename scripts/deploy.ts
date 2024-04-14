@@ -1,3 +1,5 @@
+import { BaseContract } from "ethers";
+
 require("dotenv").config();
 
 const hre = require("hardhat");
@@ -11,33 +13,23 @@ async function main() {
   const ethers = hre.ethers;
 
   const [deployer] = await ethers.getSigners();
-  const balance = await deployer.getBalance();
-  const gasPriceData = await ethers.provider.getGasPrice();
-  console.log("Deployer :", deployer.address);
-  console.log("Balance :", balance);
-  console.log("Gas Price :", ethers.utils.formatUnits(gasPriceData, "gwei"));
 
-  const contractNames = ["Name"];
-  let results = [];
+  console.log("Deployer :", deployer.address);
+
+  const contractNames = ["Create2Test", "Lock"];
 
   const Contract = await ethers.getContractFactory(contractNames[0]);
   const contract = await Contract.deploy();
-  // results.push(await contract.deployed());
+  const deployResult: BaseContract = await contract.waitForDeployment();
 
   console.log(
     "Deploy Success ===================================================="
   );
 
-  const deployedJson = {};
-  contractNames.map((value, index) => {
-    // deployedJson[value] = results[index].address;
-  });
+  // fs.writeFileSync("deployed-address.json", JSON.stringify(contract.address));
 
-  fs.writeFileSync("deployed-address.json", JSON.stringify(deployedJson));
+  console.log("Contract Address :", await deployResult.getAddress());
 
-  const usedData = await deployer.getBalance();
-  console.log("Gas Used:", ethers.utils.formatEther(`${balance - usedData}`));
-  console.log("Balance :", usedData);
   console.log(
     "Deploy Over ======================================================="
   );
