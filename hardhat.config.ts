@@ -3,13 +3,12 @@ require("dotenv").config();
 
 // const hre = require('hardhat');
 const ethers = require("ethers");
-const gasPriceWei = ethers.parseUnits("10", "gwei");
+const gasPriceWei = ethers.parseUnits("0.01", "gwei");
 const gasPrice = gasPriceWei.toString();
 
 module.exports = {
     solidity: "0.8.20",
     defaultNetwork: "hardhat",
-    gasPrice: parseInt(gasPrice),
     paths: {
         artifacts: "./src/artifacts",
         cache: "./cache",
@@ -18,12 +17,12 @@ module.exports = {
     networks: {
         hardhat: {
             chainId: 31337,
-            // forking: {
-            //     url: process.env.MAINNET_RPC,
-            // },
-            initialBaseFeePerGas: 0,
+            forking: {
+                enable: true,
+                url: process.env.MAINNET_RPC,
+                gasPrice: parseInt(gasPrice),
+            },
             loggingEnabled: true,
-            gasPrice: parseInt(gasPrice),
         },
         // scroll: {
         //     chainId: 534353,
@@ -79,6 +78,7 @@ module.exports = {
     },
     settings: {
         optimizer: {
+            viaIR: true,
             enabled: true,
             runs: 6000,
         },

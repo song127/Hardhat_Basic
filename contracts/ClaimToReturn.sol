@@ -9,39 +9,48 @@ contract ClaimToReturn {
     bytes32 private immutable infoHash;
     bytes32 private immutable secretHash;
     uint256 private immutable deployTime;
+    uint256 private amount;
 
-    AuctionInterface private immutable parentContract;
+    AuctionInterface private immutable auctionContract;
+    address public immutable helperContract;
 
     constructor(
         bytes32 _infoHash,
         bytes32 _secretHash,
-        address _parentContract
+        address _auctionContract,
+        address _helperContract
     ) {
         infoHash = _infoHash;
         secretHash = _secretHash;
         deployTime = block.timestamp;
-        parentContract = AuctionInterface(_parentContract);
+        auctionContract = AuctionInterface(_auctionContract);
+        helperContract = _helperContract;
     }
 
-    function finalize() external returns (bytes32, bytes32, uint256) {
+    function deposit() external payable {
+        require(amount == 0, "Already deposited");
+
+        amount = msg.value;
+    }
+
+    function getFinalizeDataSets() external view returns (bytes32, bytes32, uint256, uint256) {
         require(
-            address(parentContract) == msg.sender,
+            address(auctionContract) == msg.sender,
             "Only parent contract can call this function"
         );
 
-        return (infoHash, secretHash, deployTime);
+        return (infoHash, secretHash, deployTime, amount);
     }
 
-    function finalizeCallback() public {
+    function finalizeCallback() external {
         require(
-            block.timestamp >
-                parentContract.startTime() + 90 * (1 days + 1 days) + 14 days,
-            "Auction not yet ended"
+            address(auctionContract) == msg.sender,
+            "Only parent contract can call this function"
         );
 
-        payable(address(parentContract)).transfer(address(this).balance);
+        payable(address(auctionContract)).transfer(address(this).balance);
 
-        selfdestruct(payable(msg.sender));
+        selfdestruct(payable(address(auctionContract)));
     }
 
     receive() external payable {}

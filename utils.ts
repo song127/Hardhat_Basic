@@ -36,7 +36,7 @@ export const makeHashedData = () => {
     [nftID, amount, randomNum]
   );
 
-  const infoHash = ethers.keccak256(infoEncode);
+  const infoHash = ethers.keccak256(infoEncode); 
 
   const secretEncode = ethers.solidityPacked(
     ["bytes", "bytes"],

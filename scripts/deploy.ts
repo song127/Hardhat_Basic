@@ -16,7 +16,7 @@ async function main() {
 
   console.log("Deployer :", deployer.address);
 
-  const contractNames = ["Create2Test", "Lock"];
+  const contractNames = ["DeployHelper"];
 
   const Contract = await ethers.getContractFactory(contractNames[0]);
   const contract = await Contract.deploy();

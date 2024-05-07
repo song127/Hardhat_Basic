@@ -4,28 +4,28 @@ pragma solidity ^0.8.20;
 // import Create2 from OpenZeppelin
 import "@openzeppelin/contracts/utils/Create2.sol";
 
+interface ClaimToReturnInterface {
+    function deposit() external payable;
+}
+
 contract DeployHelper {
-    address public deployedContract;
     constructor() {}
 
     function deployClaimToReturn(
         bytes32 _infoHash,
         bytes32 _secretHash,
-        address _parentContract,
+        address _auctionContract,
         bytes calldata _creationBytecode
-    ) external payable returns (address) {
+    ) external payable {
         bytes memory bytecode = abi.encodePacked(
             _creationBytecode,
-            abi.encode(_infoHash, _secretHash, _parentContract)
+            abi.encode(_infoHash, _secretHash, _auctionContract, address(this))
         );
 
         address addr = Create2.deploy(0, _secretHash, bytecode);
 
-        deployedContract = addr;
+        ClaimToReturnInterface(addr).deposit{value: msg.value}();
 
-        // transfer value to the deployed contract
-        payable(addr).transfer(msg.value);
-
-        return addr;
+        selfdestruct(payable(msg.sender));
     }
 }

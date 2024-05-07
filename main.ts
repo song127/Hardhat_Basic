@@ -7,21 +7,27 @@ import { changeBlock, makeHashedData, mineBlock } from "./utils";
 
 dotenv.config();
 
-const create2Address = "0x8a791620dd6260079bf849dc5567adc3f2fdc318";
-
 const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
 const wallet = new ethers.Wallet(process.env.LOCAL_SECRET as string, provider);
 
 const main = async () => {
   // S: Deploy helper test / Success
   // const mainAdd = await deployMainContract();
-  const mainAdd = "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318";
-  const helperAdd = await deployDeployHelper();
+  // const mainAdd = "";
+  const gasData = await provider.getFeeData();
+  console.log(`Gas data: ${ethers.formatUnits(gasData.gasPrice, "gwei")}`);
+  const balance = await provider.getBalance(""
+  );
+  console.log(`Balance: ${ethers.formatEther(balance)}`);
+  // const helperAdd = await deployDeployHelper();
+  // const nowBalance = await provider.getBalance(wallet.address);
+  // const usedBalance = BigInt(balance - nowBalance);
+  // console.log(`Used balance: ${usedBalance}`);
   // const helperAdd = "0x7a2088a1bFc9d81c55368AE168C2C02570cB814F";
-  await changeBlock();
-  await predicateWithContract(mainAdd, helperAdd);
-  await deployClaimReturnContractFromHelper(mainAdd, helperAdd);
-  const deployedAddress = await getDeployedContractAddress(helperAdd);
+  // await changeBlock();
+  // await predicateWithContract(mainAdd, helperAdd);
+  // await deployClaimReturnContractFromHelper(mainAdd, helperAdd);
+  // const deployedAddress = await getDeployedContractAddress(helperAdd);
   // await testGetDataFromCreate2DeployedContract(deployedAddress);
 
   // S: 배포자 기준 예측 함수가 맞는가? 검증 / 실패
@@ -45,11 +51,7 @@ const predicateWithContract = async (mainAdd: string, helperAdd: string) => {
     wallet
   );
 
-  const data = await contract.predictAddress(
-    infoHash,
-    secretHash,
-    helperAdd
-  );
+  const data = await contract.predictAddress(infoHash, secretHash, helperAdd);
 
   console.log(`Predicted address: ${data}`);
 };
