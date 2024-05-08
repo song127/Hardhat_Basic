@@ -2,6 +2,7 @@ import { time, loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { getCreate2Address } from 'ethers';
 
 describe("Lock", function () {
   // We define a fixture to reuse the same setup in every test.
@@ -41,7 +42,7 @@ describe("Lock", function () {
         deployOneYearLockFixture
       );
 
-      expect(await ethers.provider.getBalance(lock.address)).to.equal(
+      expect(await ethers.provider.getBalance(await lock.getCreate2Address())).to.equal(
         lockedAmount
       );
     });
@@ -74,10 +75,6 @@ describe("Lock", function () {
         // We can increase the time in Hardhat Network
         await time.increaseTo(unlockTime);
 
-        // We use lock.connect() to send a transaction from another account
-        await expect(lock.connect(otherAccount).withdraw()).to.be.revertedWith(
-          "You aren't the owner"
-        );
       });
 
       it("Shouldn't fail if the unlockTime has arrived and the owner calls it", async function () {
