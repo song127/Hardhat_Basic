@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "main": "node main.js",
+    "node": "npx hardhat node",
     "nodeLocal": "npx hardhat node --network local",
     "nodeMainLocal": "npx hardhat node --network mainLocal",
     "deployCy": "npx hardhat run scripts/deploy.js --network klaytn",

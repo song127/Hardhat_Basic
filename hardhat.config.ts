@@ -1,11 +1,6 @@
 import "@nomicfoundation/hardhat-toolbox";
 require("dotenv").config();
 
-// const hre = require('hardhat');
-const ethers = require("ethers");
-const gasPriceWei = ethers.parseUnits("0.01", "gwei");
-const gasPrice = gasPriceWei.toString();
-
 module.exports = {
     solidity: "0.8.20",
     defaultNetwork: "hardhat",
@@ -16,14 +11,31 @@ module.exports = {
     // npx hardhat run --network localhost scripts/deploy.js
     networks: {
         hardhat: {
+            // chainId: 31337,
+            // loggingEnabled: true,
+            // initialBaseFeePerGas: 0,
             chainId: 31337,
             forking: {
                 enable: true,
                 url: process.env.MAINNET_RPC,
-                gasPrice: parseInt(gasPrice),
             },
             loggingEnabled: true,
         },
+        // local: {
+        //     url: "http://127.0.0.1:8545",
+        //     chainId: 31337,
+        //     loggingEnabled: true,
+        //     initialBaseFeePerGas: 0,
+        // },
+        // mainLocal: {
+        //     url: "http://127.0.0.1:8545",
+        //     chainId: 31337,
+        //     forking: {
+        //         enable: true,
+        //         url: process.env.MAINNET_RPC,
+        //     },
+        //     loggingEnabled: true,
+        // },
         // scroll: {
         //     chainId: 534353,
         //     initialBaseFeePerGas: 0,
